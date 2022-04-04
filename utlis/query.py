@@ -113,7 +113,7 @@ class CN:
             print(table3)
             inn = input("是否查看角色圣遗物词条?\n(Y/n)")
             if inn == "Y" or inn == "y":
-                CN_reliquaries_info(data)
+                reliquaries_info(data)
 
 
 class OS:
@@ -223,14 +223,14 @@ class OS:
             print(table3)
             inn = input("是否查看角色圣遗物词条?\n(Y/n)")
             if inn == "Y" or inn == "y":
-                CN_reliquaries_info(data)
+                reliquaries_info(data)
 
-@staticmethod
-def CN_reliquaries_info(data: {}):
+
+def reliquaries_info(data: {}):
     inn = input("请输入你要查询的人物id\n")
     if inn.isalnum():
         if int(inn) < 0 or int(inn) > len(data['roles']) - 1:
-            CN_reliquaries_info(data)
+            reliquaries_info(data)
             return
         print('1')
         table4 = PrettyTable(['角色名称', '圣遗物', '词条'])
@@ -250,12 +250,12 @@ def CN_reliquaries_info(data: {}):
         print(table4)
         inn = input('是否要继续查询\n(Y/n)')
         if inn == "Y" or inn == "y":
-            CN_reliquaries_info(data)
+            reliquaries_info(data)
         else:
             return
     elif inn == '':
         return
     else:
         print("输入错误,请重新输入,退出直接按回车")
-        CN_reliquaries_info(data)
+        reliquaries_info(data)
     return
