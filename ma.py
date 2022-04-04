@@ -30,6 +30,15 @@ def run():
         selectQueryMethod()
         run()
     elif inn == '4':
+        print()
+        print("Q: 查询国际服玩家时报错\"http request failed,code: 403\"")
+        print("A: 目前需要膜♂法上网，然后配置http代理即可")
+        print()
+        print("Q: 如何获取Cookie")
+        print("A: 打开米游社(HoYoLab),按下F12,选中\"console\"(\"控制台\"),在里面输入\"document.cookie\",复制,粘贴到程序内即可(不要复制开头和结尾的\" \' \")")
+        print()
+        print("Q: 查询玩家时报错\"Please login\"")
+        print("A: 重新复制Cookie到程序内")
         input()
         run()
     elif inn == '5':

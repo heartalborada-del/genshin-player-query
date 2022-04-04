@@ -143,7 +143,6 @@ class CN:
         }
         re = utlis.request.doGet(url=(CN_TAKUMI_URL + "game_record/app/card/wapi/getGameRecordCard?uid=" + MiYouSheID),
                                  headers=headers)
-        print(re.text)
         js = json.loads(re.text)
         nickname = ""
         gameRoleID = ""
