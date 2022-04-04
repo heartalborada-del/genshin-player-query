@@ -115,12 +115,13 @@ def CN_MiYouSheID_query(MiYouSheID):
     b = 0
     for a in data:
         if not b == 0:
-            table.add_row([showList[b-1], data[a]])
+            table.add_row([showList[b - 1], data[a]])
         b += 1
     print(table)
     inn = input("继续查询?\n(Y/n)")
     if inn == "Y" or inn == "y" or inn == "":
         CN_uid_query(uid=data['game_role_id'], server=data['region'])
+
 
 def OS_HoYoLabID_query(HoYoLabID):
     data = json.loads(stats.OS.getUserInfo(HoYoLabID))
@@ -132,7 +133,7 @@ def OS_HoYoLabID_query(HoYoLabID):
     b = 0
     for a in data:
         if not b == 0:
-            table.add_row([showList[b-1], data[a]])
+            table.add_row([showList[b - 1], data[a]])
         b += 1
     print(table)
     inn = input("继续查询?\n(Y/n)")

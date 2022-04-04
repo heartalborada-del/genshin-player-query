@@ -1,8 +1,8 @@
-import collections
 import json
 
 import main
-import utlis.request, utlis.DS
+import utlis.DS
+import utlis.request
 
 OS_TAKUMI_URL = "https://bbs-api-os.hoyolab.com/"
 CN_TAKUMI_URL = "https://api-takumi-record.mihoyo.com/"
@@ -18,7 +18,7 @@ class OS:
             'User-Agent': OS_UA,
             'x-rpc-client_type': '5',
             'x-rpc-app_version': '1.5.0',
-            #'DS': utlis.DS.generate_ds(),
+            # 'DS': utlis.DS.generate_ds(),
             'Referer': 'https://webstatic-sea.hoyolab.com/',
             'Cookie': main.Oversea_Cookie
         }
@@ -46,7 +46,7 @@ class OS:
                                "region": region,
                                "region_name": regionName,
                                "level": level})
-        return json.dumps({"message": 'http request failed,code: '+ str(re.status_code),
+        return json.dumps({"message": 'http request failed,code: ' + str(re.status_code),
                            "name": nickname,
                            "game_role_id": gameRoleID,
                            "region": region,

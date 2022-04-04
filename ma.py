@@ -1,9 +1,9 @@
-import json
-
 from prettytable import PrettyTable
 
 import main
-import utlis.options, utlis.stats, utlis.query
+import utlis.options
+import utlis.query
+import utlis.stats
 
 serverMaps = ['cn_gf01', 'cn_qd01', 'os_asia', 'os_euro', 'os_usa', 'os_cht']
 
@@ -54,7 +54,7 @@ def selectQueryMethod():
             if a == 0:
                 table.add_row(["任意键", showList[a]])
                 continue
-            table.add_row([a,showList[a]])
+            table.add_row([a, showList[a]])
         print(table)
         inn = input()
         if inn == '1':
@@ -86,7 +86,7 @@ def selectQueryMethod():
             server = serverMaps[int(inn) - 1]
             uid = input('请输入玩家UID\n')
             if uid.isdigit():
-                utlis.query.CN_uid_query(uid,server)
+                utlis.query.CN_uid_query(uid, server)
             else:
                 print("UID不为整数")
         elif inn == '3' or inn == '4' or inn == '5' or inn == '6':
@@ -96,6 +96,6 @@ def selectQueryMethod():
             server = serverMaps[int(inn) - 1]
             uid = input('请输入玩家UID\n')
             if uid.isdigit():
-                utlis.query.OS_uid_query(uid,server)
+                utlis.query.OS_uid_query(uid, server)
             else:
                 print("UID不为整数")
