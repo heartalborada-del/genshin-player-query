@@ -72,7 +72,7 @@ def selectQueryMethod():
                 return
             uid = input('请输入米游社ID\n')
             if uid.isdigit():
-                utlis.query.CN_MiYouSheID_query(uid)
+                utlis.query.CN.CN_MiYouSheID_query(uid)
             else:
                 print("UID不为整数")
         elif inn == '2':
@@ -81,7 +81,7 @@ def selectQueryMethod():
                 return
             uid = input('请输入 HoYoLab ID\n')
             if uid.isdigit():
-                utlis.query.OS_HoYoLabID_query(uid)
+                utlis.query.OS.OS_HoYoLabID_query(uid)
             else:
                 print("UID不为整数")
     elif inn == '2':
@@ -101,7 +101,7 @@ def selectQueryMethod():
             server = serverMaps[int(inn) - 1]
             uid = input('请输入玩家UID\n')
             if uid.isdigit():
-                utlis.query.CN_uid_query(uid, server)
+                utlis.query.CN.CN_uid_query(uid, server)
             else:
                 print("UID不为整数")
         elif inn == '3' or inn == '4' or inn == '5' or inn == '6':
@@ -111,6 +111,6 @@ def selectQueryMethod():
             server = serverMaps[int(inn) - 1]
             uid = input('请输入玩家UID\n')
             if uid.isdigit():
-                utlis.query.OS_uid_query(uid, server)
+                utlis.query.OS.OS_uid_query(uid, server)
             else:
                 print("UID不为整数")

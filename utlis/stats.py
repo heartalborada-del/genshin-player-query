@@ -3,6 +3,7 @@ import json
 import main
 import utlis.DS
 import utlis.request
+from utlis import request
 
 OS_TAKUMI_URL = "https://bbs-api-os.hoyolab.com/"
 CN_TAKUMI_URL = "https://api-takumi-record.mihoyo.com/"
@@ -131,6 +132,46 @@ class OS:
                            'world_exploration': worldExploration,
                            'homes': sereniteaPot})
 
+    def getRoleWeaponAndReliquaries(UID: str, region: str) -> []:
+        headers = {
+            'User-Agent': OS_UA,
+            'x-rpc-client_type': '4',
+            'x-rpc-app_version': '1.5.0',
+            'DS': utlis.DS.generate_ds(),
+            'Cookie': main.Oversea_Cookie
+        }
+        re = request.doPost(url=(OS_GAME_RECORD_URL + "character"),
+                            headers=headers, body={"role_id": UID, "server": region})
+        js = json.loads(re.text)
+        roles = []
+        if js['retcode'] == 0:
+            for a in js['data']['avatars']:
+                role = {'name': a['name'],
+                        'element': a['element'],
+                        'level': a['level'],
+                        'rarity': a['rarity'],
+                        'actived_constellation_num': a['actived_constellation_num']}
+                weapon = {'name': a['weapon']['name'],
+                          'rarity': a['weapon']['rarity'],
+                          'type': a['weapon']['type_name'],
+                          'level': a['weapon']['level'],
+                          'promote_level': a['weapon']['promote_level']}
+                reliquaries = []
+                for b in a['reliquaries']:
+                    affixes = []
+                    for c in b['set']['affixes']:
+                        affixes.append({'effect': c['effect']})
+                    reliquaries.append({'name': b['name'],
+                                        'rarity': b['rarity'],
+                                        'level': b['level'],
+                                        'pos': b['pos'],
+                                        'affixes': affixes})
+                roles.append({'role': role,
+                              'weapon': weapon,
+                              'reliquaries': reliquaries})
+            return {'message': js['message'], 'roles': roles}
+        return [js['message']]
+
 
 class CN:
     def getUserInfo(MiYouSheID: str) -> {}:
@@ -151,12 +192,12 @@ class CN:
         level = ""
         if js['retcode'] == 0:
             if js['data']['list']:
-                js = js['data']['list'][0]
-                nickname = js['nickname']
-                gameRoleID = js["game_role_id"]
-                region = js['region']
-                regionName = js['region_name']
-                level = str(js['level'])
+                a = js['data']['list'][0]
+                nickname = a['nickname']
+                gameRoleID = a["game_role_id"]
+                region = a['region']
+                regionName = a['region_name']
+                level = str(a['level'])
         return json.dumps({"message": js['message'],
                            "name": nickname,
                            "game_role_id": gameRoleID,
@@ -241,3 +282,44 @@ class CN:
                            'summary': summary,
                            'world_exploration': worldExploration,
                            'homes': sereniteaPot})
+
+    def getRoleWeaponAndReliquaries(UID: str, region: str) -> []:
+        headers = {
+            'User-Agent': CN_UA,
+            'x-rpc-client_type': '5',
+            'x-rpc-app_version': '2.11.1',
+            'DS': utlis.DS.generate_cn_ds(body={"role_id": UID, "server": region}),
+            'Cookie': main.CN_Cookie,
+            'Referer': "https://webstatic.mihoyo.com/"
+        }
+        re = request.doPost(url=(CN_GAME_RECORD_URL + "genshin/api/character"),
+                            headers=headers, body={"role_id": UID, "server": region})
+        js = json.loads(re.text)
+        roles = []
+        if js['retcode'] == 0:
+            for a in js['data']['avatars']:
+                role = {'name': a['name'],
+                        'element': a['element'],
+                        'level': a['level'],
+                        'rarity': a['rarity'],
+                        'actived_constellation_num': a['actived_constellation_num']}
+                weapon = {'name': a['weapon']['name'],
+                          'rarity': a['weapon']['rarity'],
+                          'type': a['weapon']['type_name'],
+                          'level': a['weapon']['level'],
+                          'promote_level': a['weapon']['promote_level']}
+                reliquaries = []
+                for b in a['reliquaries']:
+                    affixes = []
+                    for c in b['set']['affixes']:
+                        affixes.append({'effect': c['effect']})
+                    reliquaries.append({'name': b['name'],
+                                        'rarity': b['rarity'],
+                                        'level': b['level'],
+                                        'pos': b['pos'],
+                                        'affixes': affixes})
+                roles.append({'role': role,
+                              'weapon': weapon,
+                              'reliquaries': reliquaries})
+            return {'message': js['message'], 'roles': roles}
+        return [js['message']]
