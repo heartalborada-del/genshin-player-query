@@ -58,12 +58,18 @@ def selectQueryMethod():
         print(table)
         inn = input()
         if inn == '1':
+            if main.CN_Cookie == "":
+                print('您还未输入米游社Cookies')
+                return
             uid = input('请输入米游社ID\n')
             if uid.isdigit():
                 utlis.query.CN_MiYouSheID_query(uid)
             else:
                 print("UID不为整数")
         elif inn == '2':
+            if main.Oversea_Cookie == "":
+                print('您还未输入 HoYoLab Cookies')
+                return
             uid = input('请输入 HoYoLab ID\n')
             if uid.isdigit():
                 utlis.query.OS_HoYoLabID_query(uid)
