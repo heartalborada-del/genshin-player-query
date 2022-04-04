@@ -234,6 +234,7 @@ def reliquaries_info(data: {}):
             return
         print('1')
         table4 = PrettyTable(['角色名称', '圣遗物', '词条'])
+        table4.hrules = True
         for a in data['roles'][int(inn)]['reliquaries']:
             aff = ""
             for b in range(0, len(a['affixes'])):
@@ -245,7 +246,7 @@ def reliquaries_info(data: {}):
                 if b == len(a['affixes']) - 1:
                     aff += '词条' + str(b + 1) + ": " + eff
                     continue
-                aff += '词条' + str(b + 1) + ": " + eff + "\n"
+                aff += '词条' + str(b + 1) + ": " + eff
             table4.add_row([data['roles'][int(inn)]['role']['name'], a['name'], aff])
         print(table4)
         inn = input('是否要继续查询\n(Y/n)')
