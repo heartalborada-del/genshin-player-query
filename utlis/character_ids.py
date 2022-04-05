@@ -14,7 +14,7 @@ ids = {10000003: '琴', 10000016: '迪卢克', 10000022: '温迪', 0: '可莉',
 
 
 def getName(character_id: int) -> str:
-    name = 'id-'+str(character_id)
+    name = 'id-' + str(character_id)
     if character_id in ids.keys():
         name = ids[character_id]
     return name

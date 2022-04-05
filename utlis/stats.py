@@ -3,8 +3,8 @@ import time
 
 import main
 import utlis.DS
-import utlis.request
 import utlis.character_ids
+import utlis.request
 from utlis import request
 
 OS_TAKUMI_URL = "https://bbs-api-os.hoyolab.com/"
@@ -183,10 +183,10 @@ class OS:
             'DS': utlis.DS.generate_ds(),
             'Cookie': main.Oversea_Cookie
         }
-        re = utlis.request.doGet(url=(OS_GAME_RECORD_URL + "genshin/api/spiralAbyss?server=" + region +"&role_id=" + UID +
-                                       '&schedule_type=' + schedule_type),
-                                 headers=headers)
-        print(re.text)
+        re = utlis.request.doGet(
+            url=(OS_GAME_RECORD_URL + "genshin/api/spiralAbyss?server=" + region + "&role_id=" + UID +
+                 '&schedule_type=' + schedule_type),
+            headers=headers)
         js = json.loads(re.text)
         tm = ''
         mf = ''
@@ -290,6 +290,7 @@ class CN:
         }
         re = utlis.request.doGet(url=(CN_GAME_RECORD_URL + "genshin/api/index?role_id=" + UID + "&server=" + region),
                                  headers=headers)
+        #print(re.text)
         js = json.loads(re.text)
         card = []
         if js['retcode'] == 0:
@@ -370,7 +371,6 @@ class CN:
         re = request.doPost(url=(CN_GAME_RECORD_URL + "genshin/api/character"),
                             headers=headers, body={"role_id": UID, "server": region})
         js = json.loads(re.text)
-        #print(re.text)
         roles = []
         if js['retcode'] == 0:
             for a in js['data']['avatars']:
@@ -428,34 +428,34 @@ class CN:
             da = js['data']
             id = da['schedule_id']
             tm = time.strftime("%Y.%m.%d", (time.localtime(int(da['start_time'])))) + ' - ' + time.strftime(
-                    "%Y.%m.%d", time.localtime(int(da['end_time'])))
+                "%Y.%m.%d", time.localtime(int(da['end_time'])))
             mf = js['data']['max_floor']
             tbt = js['data']['total_battle_times']
             twt = js['data']['total_win_times']
             for a in da['reveal_rank']:
                 reveal_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
-                           'value': a['value'],
-                           'rarity': a['rarity']})
+                                    'value': a['value'],
+                                    'rarity': a['rarity']})
             for a in da['defeat_rank']:
                 defeat_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
-                           'value': a['value'],
-                           'rarity': a['rarity']})
+                                    'value': a['value'],
+                                    'rarity': a['rarity']})
             for a in da['damage_rank']:
                 damage_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
-                           'value': a['value'],
-                           'rarity': a['rarity']})
+                                    'value': a['value'],
+                                    'rarity': a['rarity']})
             for a in da['take_damage_rank']:
                 take_damage_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
-                           'value': a['value'],
-                           'rarity': a['rarity']})
+                                         'value': a['value'],
+                                         'rarity': a['rarity']})
             for a in da['normal_skill_rank']:
                 normal_skill_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
-                           'value': a['value'],
-                           'rarity': a['rarity']})
+                                          'value': a['value'],
+                                          'rarity': a['rarity']})
             for a in da['energy_skill_rank']:
                 energy_skill_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
-                           'value': a['value'],
-                           'rarity': a['rarity']})
+                                          'value': a['value'],
+                                          'rarity': a['rarity']})
         return {'message': js['message'],
                 'id': id,
                 'time': tm,
@@ -466,6 +466,6 @@ class CN:
                          'defeat': defeat_rank,
                          'damage': damage_rank,
                          'take_damage': take_damage_rank,
-                         'normal_skill':normal_skill_rank,
-                         'energy_skill':energy_skill_rank}
+                         'normal_skill': normal_skill_rank,
+                         'energy_skill': energy_skill_rank}
                 }

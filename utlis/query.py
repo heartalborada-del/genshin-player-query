@@ -122,7 +122,7 @@ class CN:
         data1 = utlis.stats.CN.getSpiralAbyss(UID=uid, region=server, schedule_type='1')
         data2 = utlis.stats.CN.getSpiralAbyss(UID=uid, region=server, schedule_type='2')
         table = PrettyTable(['期数', '开始-结束时间', '总挑战次数', '胜利次数', '最深抵达'])
-        #print(data1)
+        # print(data1)
         table.add_row([data1['id'], data1['time'], data1['total_battle_times'],
                        data1['total_win_times'], data1['max_floor']])
         table.add_row([data2['id'], data2['time'], data2['total_battle_times'],
@@ -131,9 +131,10 @@ class CN:
         print(table)
         table = PrettyTable(['期数', '出战次数', '最多击破数', '最强一击', '承受最多伤害', '元素爆发次数', '元素战技释放数'])
         rank = utlis.query.rank_info(data1['rank'])
-        table.add_row([data1['id'], rank[0], rank[1], rank[2],rank[3], rank[4], rank[5]])
+        table.add_row([data1['id'], rank[0], rank[1], rank[2], rank[3], rank[4], rank[5]])
         rank = utlis.query.rank_info(data2['rank'])
-        table.add_row([data1['id'], rank[0], rank[1], rank[2],rank[3], rank[4], rank[5]])
+        print(rank)
+        table.add_row([data2['id'], rank[0], rank[1], rank[2], rank[3], rank[4], rank[5]])
         table.hrules = True
         print(table)
 
@@ -254,7 +255,7 @@ class OS:
         data1 = utlis.stats.OS.getSpiralAbyss(UID=uid, region=server, schedule_type='1')
         data2 = utlis.stats.OS.getSpiralAbyss(UID=uid, region=server, schedule_type='2')
         table = PrettyTable(['期数', '开始-结束时间', '总挑战次数', '胜利次数', '最深抵达'])
-        #print(data1)
+        # print(data1)
         table.add_row([data1['id'], data1['time'], data1['total_battle_times'],
                        data1['total_win_times'], data1['max_floor']])
         table.add_row([data2['id'], data2['time'], data2['total_battle_times'],
@@ -263,12 +264,11 @@ class OS:
         print(table)
         table = PrettyTable(['期数', '出战次数', '最多击破数', '最强一击', '承受最多伤害', '元素爆发次数', '元素战技释放数'])
         rank = utlis.query.rank_info(data1['rank'])
-        table.add_row([data1['id'], rank[0], rank[1], rank[2],rank[3], rank[4], rank[5]])
+        table.add_row([data1['id'], rank[0], rank[1], rank[2], rank[3], rank[4], rank[5]])
         rank = utlis.query.rank_info(data2['rank'])
-        table.add_row([data1['id'], rank[0], rank[1], rank[2],rank[3], rank[4], rank[5]])
+        table.add_row([data2['id'], rank[0], rank[1], rank[2], rank[3], rank[4], rank[5]])
         table.hrules = True
         print(table)
-
 
 
 def reliquaries_info(data: {}):
@@ -350,4 +350,9 @@ def rank_info(rank: {}) -> []:
             energy_skill += info['name'] + '-' + str(info['value'])
             continue
         energy_skill += info['name'] + '-' + str(info['value']) + '\n'
-    return [reveal, defeat, damage, take_damage, normal_skill, energy_skill]
+    return [reveal and reveal or '---',
+            defeat and defeat or '---',
+            damage and damage or '---',
+            take_damage and take_damage or '---',
+            normal_skill and normal_skill or '---',
+            energy_skill and energy_skill or '---']

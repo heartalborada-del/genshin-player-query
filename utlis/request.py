@@ -9,6 +9,6 @@ def doGet(url, headers) -> Response:
     return re
 
 
-def doPost(url, headers, body) ->Response:
+def doPost(url, headers, body) -> Response:
     re = requests.post(url=url, headers=headers, json=body, proxies={'http': main.httpProxy, 'https': main.httpProxy})
     return re
