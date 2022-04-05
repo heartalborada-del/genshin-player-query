@@ -133,7 +133,7 @@ class CN:
         rank = utlis.query.rank_info(data1['rank'])
         table.add_row([data1['id'], rank[0], rank[1], rank[2], rank[3], rank[4], rank[5]])
         rank = utlis.query.rank_info(data2['rank'])
-        print(rank)
+        #print(rank)
         table.add_row([data2['id'], rank[0], rank[1], rank[2], rank[3], rank[4], rank[5]])
         table.hrules = True
         print(table)

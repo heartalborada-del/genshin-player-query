@@ -102,9 +102,9 @@ class OS:
                        'electroculus_number': a['electroculus_number'],
                        'way_point_number': a['way_point_number'],
                        'domain_number': a['domain_number'],
+                       'luxurious_chest_number': a['luxurious_chest_number'],
                        'precious_chest_number': a['precious_chest_number'],
                        'exquisite_chest_number': a['exquisite_chest_number'],
-                       'luxurious_chest_number': a['luxurious_chest_number'],
                        'common_chest_number': a['common_chest_number'],
                        'magic_chest_number': a['magic_chest_number'],
                        'active_days': a['active_day_number'],
@@ -290,7 +290,7 @@ class CN:
         }
         re = utlis.request.doGet(url=(CN_GAME_RECORD_URL + "genshin/api/index?role_id=" + UID + "&server=" + region),
                                  headers=headers)
-        print(re.text)
+        #print(re.text)
         js = json.loads(re.text)
         card = []
         if js['retcode'] == 0:
@@ -326,9 +326,9 @@ class CN:
                        'electroculus_number': a['electroculus_number'],
                        'way_point_number': a['way_point_number'],
                        'domain_number': a['domain_number'],
+                       'luxurious_chest_number': a['luxurious_chest_number'],
                        'precious_chest_number': a['precious_chest_number'],
                        'exquisite_chest_number': a['exquisite_chest_number'],
-                       'luxurious_chest_number': a['luxurious_chest_number'],
                        'common_chest_number': a['common_chest_number'],
                        'magic_chest_number': a['magic_chest_number'],
                        'active_days': a['active_day_number'],
