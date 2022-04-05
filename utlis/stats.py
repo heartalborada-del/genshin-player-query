@@ -1,13 +1,15 @@
 import json
+import time
 
 import main
 import utlis.DS
 import utlis.request
+import utlis.character_ids
 from utlis import request
 
 OS_TAKUMI_URL = "https://bbs-api-os.hoyolab.com/"
 CN_TAKUMI_URL = "https://api-takumi-record.mihoyo.com/"
-OS_GAME_RECORD_URL = "https://bbs-api-os.hoyolab.com/game_record/genshin/api/"
+OS_GAME_RECORD_URL = "https://bbs-api-os.hoyolab.com/game_record/"
 CN_GAME_RECORD_URL = "https://api-takumi-record.mihoyo.com/game_record/app/"
 OS_UA = "Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0"
 CN_UA = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) miHoYoBBS/2.11.1"
@@ -37,11 +39,11 @@ class OS:
                     for a in js['data']['list']:
                         if not a['game_id'] == 2:
                             continue
-                        nickname = js['nickname']
-                        gameRoleID = js["game_role_id"]
-                        region = js['region']
-                        regionName = js['region_name']
-                        level = str(js['level'])
+                        nickname = a['nickname']
+                        gameRoleID = a["game_role_id"]
+                        region = a['region']
+                        regionName = a['region_name']
+                        level = str(a['level'])
             return json.dumps({"message": js['message'],
                                "name": nickname,
                                "game_role_id": gameRoleID,
@@ -63,7 +65,7 @@ class OS:
             'DS': utlis.DS.generate_ds(),
             'Cookie': main.Oversea_Cookie
         }
-        re = utlis.request.doGet(url=(OS_GAME_RECORD_URL + "index?role_id=" + UID + "&server=" + region),
+        re = utlis.request.doGet(url=(OS_GAME_RECORD_URL + "genshin/api/index?role_id=" + UID + "&server=" + region),
                                  headers=headers)
         js = json.loads(re.text)
         card = []
@@ -87,7 +89,7 @@ class OS:
             'DS': utlis.DS.generate_ds(),
             'Cookie': main.Oversea_Cookie
         }
-        re = utlis.request.doGet(url=(OS_GAME_RECORD_URL + "index?role_id=" + UID + "&server=" + region),
+        re = utlis.request.doGet(url=(OS_GAME_RECORD_URL + "genshin/api/index?role_id=" + UID + "&server=" + region),
                                  headers=headers)
         js = json.loads(re.text)
         summary = {}
@@ -141,7 +143,7 @@ class OS:
             'DS': utlis.DS.generate_ds(),
             'Cookie': main.Oversea_Cookie
         }
-        re = request.doPost(url=(OS_GAME_RECORD_URL + "character"),
+        re = request.doPost(url=(OS_GAME_RECORD_URL + "genshin/api/character"),
                             headers=headers, body={"role_id": UID, "server": region})
         js = json.loads(re.text)
         roles = []
@@ -172,6 +174,76 @@ class OS:
                               'reliquaries': reliquaries})
             return {'message': js['message'], 'roles': roles}
         return [js['message']]
+
+    def getSpiralAbyss(UID: str, region: str, schedule_type: str) -> {}:
+        headers = {
+            'User-Agent': OS_UA,
+            'x-rpc-client_type': '4',
+            'x-rpc-app_version': '1.5.0',
+            'DS': utlis.DS.generate_ds(),
+            'Cookie': main.Oversea_Cookie
+        }
+        re = utlis.request.doGet(url=(OS_GAME_RECORD_URL + "genshin/api/spiralAbyss?server=" + region +"&role_id=" + UID +
+                                       '&schedule_type=' + schedule_type),
+                                 headers=headers)
+        print(re.text)
+        js = json.loads(re.text)
+        tm = ''
+        mf = ''
+        tbt = 0
+        twt = 0
+        id = 0
+        reveal_rank = []
+        defeat_rank = []
+        damage_rank = []
+        take_damage_rank = []
+        normal_skill_rank = []
+        energy_skill_rank = []
+        if js['retcode'] == 0:
+            da = js['data']
+            id = da['schedule_id']
+            tm = time.strftime("%Y.%m.%d", (time.localtime(int(da['start_time'])))) + ' - ' + time.strftime(
+                "%Y.%m.%d", time.localtime(int(da['end_time'])))
+            mf = js['data']['max_floor']
+            tbt = js['data']['total_battle_times']
+            twt = js['data']['total_win_times']
+            for a in da['reveal_rank']:
+                reveal_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                                    'value': a['value'],
+                                    'rarity': a['rarity']})
+            for a in da['defeat_rank']:
+                defeat_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                                    'value': a['value'],
+                                    'rarity': a['rarity']})
+            for a in da['damage_rank']:
+                damage_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                                    'value': a['value'],
+                                    'rarity': a['rarity']})
+            for a in da['take_damage_rank']:
+                take_damage_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                                         'value': a['value'],
+                                         'rarity': a['rarity']})
+            for a in da['normal_skill_rank']:
+                normal_skill_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                                          'value': a['value'],
+                                          'rarity': a['rarity']})
+            for a in da['energy_skill_rank']:
+                energy_skill_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                                          'value': a['value'],
+                                          'rarity': a['rarity']})
+        return {'message': js['message'],
+                'id': id,
+                'time': tm,
+                'max_floor': mf,
+                'total_battle_times': tbt,
+                'total_win_times': twt,
+                'rank': {'reveal': reveal_rank,
+                         'defeat': defeat_rank,
+                         'damage': damage_rank,
+                         'take_damage': take_damage_rank,
+                         'normal_skill': normal_skill_rank,
+                         'energy_skill': energy_skill_rank}
+                }
 
 
 class CN:
@@ -298,6 +370,7 @@ class CN:
         re = request.doPost(url=(CN_GAME_RECORD_URL + "genshin/api/character"),
                             headers=headers, body={"role_id": UID, "server": region})
         js = json.loads(re.text)
+        #print(re.text)
         roles = []
         if js['retcode'] == 0:
             for a in js['data']['avatars']:
@@ -326,3 +399,73 @@ class CN:
                               'reliquaries': reliquaries})
             return {'message': js['message'], 'roles': roles}
         return [js['message']]
+
+    def getSpiralAbyss(UID: str, region: str, schedule_type: str) -> {}:
+        headers = {
+            'User-Agent': CN_UA,
+            'x-rpc-client_type': '5',
+            'x-rpc-app_version': '2.11.1',
+            'DS': utlis.DS.generate_cn_ds(query={"role_id": UID, "server": region, 'schedule_type': schedule_type}),
+            'Cookie': main.CN_Cookie,
+            'Referer': "https://webstatic.mihoyo.com/"
+        }
+        re = utlis.request.doGet(url=(CN_GAME_RECORD_URL + "genshin/api/spiralAbyss?&role_id=" + UID +
+                                      '&server=' + region + '&schedule_type=' + schedule_type),
+                                 headers=headers)
+        js = json.loads(re.text)
+        tm = ''
+        mf = ''
+        tbt = 0
+        twt = 0
+        id = 0
+        reveal_rank = []
+        defeat_rank = []
+        damage_rank = []
+        take_damage_rank = []
+        normal_skill_rank = []
+        energy_skill_rank = []
+        if js['retcode'] == 0:
+            da = js['data']
+            id = da['schedule_id']
+            tm = time.strftime("%Y.%m.%d", (time.localtime(int(da['start_time'])))) + ' - ' + time.strftime(
+                    "%Y.%m.%d", time.localtime(int(da['end_time'])))
+            mf = js['data']['max_floor']
+            tbt = js['data']['total_battle_times']
+            twt = js['data']['total_win_times']
+            for a in da['reveal_rank']:
+                reveal_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                           'value': a['value'],
+                           'rarity': a['rarity']})
+            for a in da['defeat_rank']:
+                defeat_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                           'value': a['value'],
+                           'rarity': a['rarity']})
+            for a in da['damage_rank']:
+                damage_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                           'value': a['value'],
+                           'rarity': a['rarity']})
+            for a in da['take_damage_rank']:
+                take_damage_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                           'value': a['value'],
+                           'rarity': a['rarity']})
+            for a in da['normal_skill_rank']:
+                normal_skill_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                           'value': a['value'],
+                           'rarity': a['rarity']})
+            for a in da['energy_skill_rank']:
+                energy_skill_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                           'value': a['value'],
+                           'rarity': a['rarity']})
+        return {'message': js['message'],
+                'id': id,
+                'time': tm,
+                'max_floor': mf,
+                'total_battle_times': tbt,
+                'total_win_times': twt,
+                'rank': {'reveal': reveal_rank,
+                         'defeat': defeat_rank,
+                         'damage': damage_rank,
+                         'take_damage': take_damage_rank,
+                         'normal_skill':normal_skill_rank,
+                         'energy_skill':energy_skill_rank}
+                }

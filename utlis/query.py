@@ -1,8 +1,8 @@
 import json
-import re
 
 from prettytable import PrettyTable
 
+import utlis.stats
 from utlis import stats
 
 
@@ -58,6 +58,9 @@ class CN:
         inn = input("是否查看角色详情\n(Y/n)")
         if inn == "Y" or inn == "y":
             CN.CN_role_info(uid, server)
+        inn = input("是否查看本期与上期深渊数据\n(Y/n)")
+        if inn == "Y" or inn == "y":
+            CN.CN_spiralAbyss_info(uid, server)
 
     def CN_MiYouSheID_query(MiYouSheID: str):
         data = json.loads(stats.CN.getUserInfo(MiYouSheID))
@@ -115,6 +118,25 @@ class CN:
             if inn == "Y" or inn == "y":
                 reliquaries_info(data)
 
+    def CN_spiralAbyss_info(uid: str, server: str):
+        data1 = utlis.stats.CN.getSpiralAbyss(UID=uid, region=server, schedule_type='1')
+        data2 = utlis.stats.CN.getSpiralAbyss(UID=uid, region=server, schedule_type='2')
+        table = PrettyTable(['期数', '开始-结束时间', '总挑战次数', '胜利次数', '最深抵达'])
+        #print(data1)
+        table.add_row([data1['id'], data1['time'], data1['total_battle_times'],
+                       data1['total_win_times'], data1['max_floor']])
+        table.add_row([data2['id'], data2['time'], data2['total_battle_times'],
+                       data2['total_win_times'], data2['max_floor']])
+        table.hrules = True
+        print(table)
+        table = PrettyTable(['期数', '出战次数', '最多击破数', '最强一击', '承受最多伤害', '元素爆发次数', '元素战技释放数'])
+        rank = utlis.query.rank_info(data1['rank'])
+        table.add_row([data1['id'], rank[0], rank[1], rank[2],rank[3], rank[4], rank[5]])
+        rank = utlis.query.rank_info(data2['rank'])
+        table.add_row([data1['id'], rank[0], rank[1], rank[2],rank[3], rank[4], rank[5]])
+        table.hrules = True
+        print(table)
+
 
 class OS:
     def OS_uid_query(uid: str, server: str):
@@ -168,6 +190,9 @@ class OS:
         inn = input("是否查看角色详情\n(Y/n)")
         if inn == "Y" or inn == "y":
             OS.OS_role_info(uid, server)
+        inn = input("是否查看本期与上期深渊数据\n(Y/n)")
+        if inn == "Y" or inn == "y":
+            OS.OS_spiralAbyss_info(uid, server)
 
     def OS_HoYoLabID_query(HoYoLabID: str):
         data = json.loads(stats.OS.getUserInfo(HoYoLabID))
@@ -225,6 +250,26 @@ class OS:
             if inn == "Y" or inn == "y":
                 reliquaries_info(data)
 
+    def OS_spiralAbyss_info(uid: str, server: str):
+        data1 = utlis.stats.OS.getSpiralAbyss(UID=uid, region=server, schedule_type='1')
+        data2 = utlis.stats.OS.getSpiralAbyss(UID=uid, region=server, schedule_type='2')
+        table = PrettyTable(['期数', '开始-结束时间', '总挑战次数', '胜利次数', '最深抵达'])
+        #print(data1)
+        table.add_row([data1['id'], data1['time'], data1['total_battle_times'],
+                       data1['total_win_times'], data1['max_floor']])
+        table.add_row([data2['id'], data2['time'], data2['total_battle_times'],
+                       data2['total_win_times'], data2['max_floor']])
+        table.hrules = True
+        print(table)
+        table = PrettyTable(['期数', '出战次数', '最多击破数', '最强一击', '承受最多伤害', '元素爆发次数', '元素战技释放数'])
+        rank = utlis.query.rank_info(data1['rank'])
+        table.add_row([data1['id'], rank[0], rank[1], rank[2],rank[3], rank[4], rank[5]])
+        rank = utlis.query.rank_info(data2['rank'])
+        table.add_row([data1['id'], rank[0], rank[1], rank[2],rank[3], rank[4], rank[5]])
+        table.hrules = True
+        print(table)
+
+
 
 def reliquaries_info(data: {}):
     inn = input("请输入你要查询的人物id\n")
@@ -260,3 +305,49 @@ def reliquaries_info(data: {}):
         print("输入错误,请重新输入,退出直接按回车")
         reliquaries_info(data)
     return
+
+
+def rank_info(rank: {}) -> []:
+    reveal = ''
+    defeat = ''
+    damage = ''
+    take_damage = ''
+    normal_skill = ''
+    energy_skill = ''
+    for a in range(0, len(rank['reveal'])):
+        info = rank['reveal'][a]
+        if a == len(rank['reveal']) - 1:
+            reveal += info['name'] + '-' + str(info['value'])
+            continue
+        reveal += info['name'] + '-' + str(info['value']) + '\n'
+    for a in range(0, len(rank['defeat'])):
+        info = rank['defeat'][a]
+        if a == len(rank['defeat']) - 1:
+            defeat += info['name'] + '-' + str(info['value'])
+            continue
+        defeat += info['name'] + '-' + str(info['value']) + '\n'
+    for a in range(0, len(rank['damage'])):
+        info = rank['damage'][a]
+        if a == len(rank['damage']) - 1:
+            damage += info['name'] + '\n' + str(info['value'])
+            continue
+        damage += info['name'] + '\n' + str(info['value']) + '\n'
+    for a in range(0, len(rank['take_damage'])):
+        info = rank['take_damage'][a]
+        if a == len(rank['take_damage']) - 1:
+            take_damage += info['name'] + '\n' + str(info['value'])
+            continue
+        take_damage += info['name'] + '\n' + str(info['value']) + '\n'
+    for a in range(0, len(rank['normal_skill'])):
+        info = rank['normal_skill'][a]
+        if a == len(rank['normal_skill']) - 1:
+            normal_skill += info['name'] + '-' + str(info['value'])
+            continue
+        normal_skill += info['name'] + '-' + str(info['value']) + '\n'
+    for a in range(0, len(rank['energy_skill'])):
+        info = rank['energy_skill'][a]
+        if a == len(rank['energy_skill']) - 1:
+            energy_skill += info['name'] + '-' + str(info['value'])
+            continue
+        energy_skill += info['name'] + '-' + str(info['value']) + '\n'
+    return [reveal, defeat, damage, take_damage, normal_skill, energy_skill]
