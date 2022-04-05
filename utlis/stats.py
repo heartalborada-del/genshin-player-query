@@ -290,7 +290,7 @@ class CN:
         }
         re = utlis.request.doGet(url=(CN_GAME_RECORD_URL + "genshin/api/index?role_id=" + UID + "&server=" + region),
                                  headers=headers)
-        #print(re.text)
+        print(re.text)
         js = json.loads(re.text)
         card = []
         if js['retcode'] == 0:
