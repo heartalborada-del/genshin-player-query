@@ -129,7 +129,7 @@ class CN:
                        data2['total_win_times'], data2['max_floor']])
         table.hrules = True
         print(table)
-        table = PrettyTable(['期数', '出战次数', '最多击破数', '最强一击', '承受最多伤害', '元素爆发次数', '元素战技释放数'])
+        table = PrettyTable(['期数', '出战次数', '最多击破数', '最强一击', '承受最多伤害', '元素战技释放数', '元素爆发次数'])
         rank = utlis.query.rank_info(data1['rank'])
         table.add_row([data1['id'], rank[0], rank[1], rank[2], rank[3], rank[4], rank[5]])
         rank = utlis.query.rank_info(data2['rank'])
