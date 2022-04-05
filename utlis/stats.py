@@ -33,15 +33,16 @@ class OS:
         if re.status_code == 200:
             js = json.loads(re.text)
             if js['retcode'] == 0:
-                msg = js['message']
                 if js['data']['list']:
-                    js = js['data']['list'][0]
-                    nickname = js['nickname']
-                    gameRoleID = js["game_role_id"]
-                    region = js['region']
-                    regionName = js['region_name']
-                    level = str(js['level'])
-            return json.dumps({"message": msg,
+                    for a in js['data']['list']:
+                        if not a['game_id'] == 2:
+                            continue
+                        nickname = js['nickname']
+                        gameRoleID = js["game_role_id"]
+                        region = js['region']
+                        regionName = js['region_name']
+                        level = str(js['level'])
+            return json.dumps({"message": js['message'],
                                "name": nickname,
                                "game_role_id": gameRoleID,
                                "region": region,
@@ -192,12 +193,14 @@ class CN:
         level = ""
         if js['retcode'] == 0:
             if js['data']['list']:
-                a = js['data']['list'][0]
-                nickname = a['nickname']
-                gameRoleID = a["game_role_id"]
-                region = a['region']
-                regionName = a['region_name']
-                level = str(a['level'])
+                for a in js['data']['list']:
+                    if not a['game_id'] == 2:
+                        continue
+                    nickname = a['nickname']
+                    gameRoleID = a["game_role_id"]
+                    region = a['region']
+                    regionName = a['region_name']
+                    level = str(a['level'])
         return json.dumps({"message": js['message'],
                            "name": nickname,
                            "game_role_id": gameRoleID,
