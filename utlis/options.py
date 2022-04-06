@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 import main
 
@@ -37,3 +38,4 @@ def readOptions():
         main.httpProxy = j['httpProxy']
         if not main.httpProxy == "":
             print("注意,你当前的代理已设置为: " + main.httpProxy)
+

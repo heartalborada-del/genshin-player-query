@@ -33,7 +33,7 @@ class OS:
         regionName = ""
         level = ""
         if re.status_code == 200:
-            js = json.loads(re.text)
+            js = json.loads(re)
             if js['retcode'] == 0:
                 if js['data']['list']:
                     for a in js['data']['list']:
@@ -67,7 +67,7 @@ class OS:
         }
         re = utlis.request.doGet(url=(OS_GAME_RECORD_URL + "genshin/api/index?role_id=" + UID + "&server=" + region),
                                  headers=headers)
-        js = json.loads(re.text)
+        js = json.loads(re)
         card = []
         if js['retcode'] == 0:
             a = js['data']['avatars']
@@ -91,7 +91,7 @@ class OS:
         }
         re = utlis.request.doGet(url=(OS_GAME_RECORD_URL + "genshin/api/index?role_id=" + UID + "&server=" + region),
                                  headers=headers)
-        js = json.loads(re.text)
+        js = json.loads(re)
         summary = {}
         worldExploration = []
         sereniteaPot = []
@@ -145,7 +145,7 @@ class OS:
         }
         re = request.doPost(url=(OS_GAME_RECORD_URL + "genshin/api/character"),
                             headers=headers, body={"role_id": UID, "server": region})
-        js = json.loads(re.text)
+        js = json.loads(re)
         roles = []
         if js['retcode'] == 0:
             for a in js['data']['avatars']:
@@ -187,7 +187,7 @@ class OS:
             url=(OS_GAME_RECORD_URL + "genshin/api/spiralAbyss?server=" + region + "&role_id=" + UID +
                  '&schedule_type=' + schedule_type),
             headers=headers)
-        js = json.loads(re.text)
+        js = json.loads(re)
         tm = ''
         mf = ''
         tbt = 0
@@ -257,7 +257,7 @@ class CN:
         }
         re = utlis.request.doGet(url=(CN_TAKUMI_URL + "game_record/app/card/wapi/getGameRecordCard?uid=" + MiYouSheID),
                                  headers=headers)
-        js = json.loads(re.text)
+        js = json.loads(re)
         nickname = ""
         gameRoleID = ""
         region = ""
@@ -290,8 +290,8 @@ class CN:
         }
         re = utlis.request.doGet(url=(CN_GAME_RECORD_URL + "genshin/api/index?role_id=" + UID + "&server=" + region),
                                  headers=headers)
-        #print(re.text)
-        js = json.loads(re.text)
+        #print(re)
+        js = json.loads(re)
         card = []
         if js['retcode'] == 0:
             a = js['data']['avatars']
@@ -315,7 +315,7 @@ class CN:
         }
         re = utlis.request.doGet(url=(CN_GAME_RECORD_URL + "genshin/api/index?role_id=" + UID + "&server=" + region),
                                  headers=headers)
-        js = json.loads(re.text)
+        js = json.loads(re)
         summary = {}
         worldExploration = []
         sereniteaPot = []
@@ -370,7 +370,7 @@ class CN:
         }
         re = request.doPost(url=(CN_GAME_RECORD_URL + "genshin/api/character"),
                             headers=headers, body={"role_id": UID, "server": region})
-        js = json.loads(re.text)
+        js = json.loads(re)
         roles = []
         if js['retcode'] == 0:
             for a in js['data']['avatars']:
@@ -412,7 +412,7 @@ class CN:
         re = utlis.request.doGet(url=(CN_GAME_RECORD_URL + "genshin/api/spiralAbyss?&role_id=" + UID +
                                       '&server=' + region + '&schedule_type=' + schedule_type),
                                  headers=headers)
-        js = json.loads(re.text)
+        js = json.loads(re)
         tm = ''
         mf = ''
         tbt = 0

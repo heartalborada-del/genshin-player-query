@@ -277,7 +277,6 @@ def reliquaries_info(data: {}):
         if int(inn) < 0 or int(inn) > len(data['roles']) - 1:
             reliquaries_info(data)
             return
-        print('1')
         table4 = PrettyTable(['角色名称', '圣遗物', '词条'])
         table4.hrules = True
         for a in data['roles'][int(inn)]['reliquaries']:
