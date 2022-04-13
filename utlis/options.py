@@ -21,16 +21,18 @@ def setHttpProxy():
 
 
 def writeOptions():
-    with open("options.json", "w") as f:
+    with open("config/options.json", "w") as f:
         f.write(json.dumps({'CN_Cookie': main.CN_Cookie,
                             'Oversea_Cookie': main.Oversea_Cookie,
                             'httpProxy': main.httpProxy}))
 
 
 def readOptions():
-    if not os.path.isfile("options.json"):
+    if not os.path.isdir('config'):
+        os.makedirs('config')
+    if not os.path.isfile("config/options.json"):
         writeOptions()
-    with open("options.json", "r") as f:
+    with open("config/options.json", "r") as f:
         data = f.read()
         j = json.loads(data)
         main.CN_Cookie = j['CN_Cookie']
