@@ -4,6 +4,7 @@
 block_cipher = None
 
 
+<<<<<<< HEAD
 a = Analysis(['main.py',
                 'ma.py',
                 'utlis/query.py',
@@ -12,6 +13,9 @@ a = Analysis(['main.py',
                 'utlis/options.py',
                 'utlis/request.py',
                 'utlis/stats.py'],
+=======
+a = Analysis(['main.py'],
+>>>>>>> eb4ae7e857ac122b41a2ed9c5a0509592aa0aaf8
              pathex=[],
              binaries=[],
              datas=[],
@@ -33,7 +37,11 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,  
           [],
+<<<<<<< HEAD
           name='genshinPlayerQuery',
+=======
+          name='main',
+>>>>>>> eb4ae7e857ac122b41a2ed9c5a0509592aa0aaf8
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
@@ -44,4 +52,8 @@ exe = EXE(pyz,
           disable_windowed_traceback=False,
           target_arch=None,
           codesign_identity=None,
+<<<<<<< HEAD
           entitlements_file=None , icon='ico.ico')
+=======
+          entitlements_file=None , icon='C:\\Users\\heart\\PycharmProjects\\genshinPlayerCheck\\ico.ico')
+>>>>>>> eb4ae7e857ac122b41a2ed9c5a0509592aa0aaf8
