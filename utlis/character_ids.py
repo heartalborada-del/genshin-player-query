@@ -24,14 +24,14 @@ def checkNewIDsList() -> None:
         os.makedirs('config')
     if not os.path.isfile("config/characters_ids.json"):
         with open("config/options.json", "w") as f:
-            f.write(gh_json)
+            f.write(str(gh_json))
             ids = gh_json['ids']
         return
     with open("config/options.json", "r") as f:
         local_json = json.loads(f.read)
     if gh_json['version'] > local_json['version']:
         with open("config/options.json", "w") as f:
-            f.write(gh_json)
+            f.write(str(gh_json))
             ids = gh_json['ids']
         return
     ids = local_json['ids']
