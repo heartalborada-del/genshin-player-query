@@ -1,3 +1,4 @@
+from array import array
 import json
 import time
 
@@ -16,7 +17,7 @@ CN_UA = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/60
 
 
 class OS:
-    def getUserInfo(HoYoLabID: str) -> {}:
+    def getUserInfo(HoYoLabID: str) -> dict:
         headers = {
             'User-Agent': OS_UA,
             'x-rpc-client_type': '5',
@@ -57,7 +58,7 @@ class OS:
                            "region_name": regionName,
                            "level": level})
 
-    def getRoleInfo(UID: str, region: str) -> []:
+    def getRoleInfo(UID: str, region: str) -> array:
         headers = {
             'User-Agent': OS_UA,
             'x-rpc-client_type': '4',
@@ -81,7 +82,7 @@ class OS:
                 card.append(c)
         return card
 
-    def getGameInfo(UID: str, region: str) -> {}:
+    def getGameInfo(UID: str, region: str) -> dict:
         headers = {
             'User-Agent': OS_UA,
             'x-rpc-client_type': '4',
@@ -135,7 +136,7 @@ class OS:
                            'world_exploration': worldExploration,
                            'homes': sereniteaPot})
 
-    def getRoleWeaponAndReliquaries(UID: str, region: str) -> []:
+    def getRoleWeaponAndReliquaries(UID: str, region: str) -> array:
         headers = {
             'User-Agent': OS_UA,
             'x-rpc-client_type': '4',
@@ -175,7 +176,7 @@ class OS:
             return {'message': js['message'], 'roles': roles}
         return [js['message']]
 
-    def getSpiralAbyss(UID: str, region: str, schedule_type: str) -> {}:
+    def getSpiralAbyss(UID: str, region: str, schedule_type: str) -> dict:
         headers = {
             'User-Agent': OS_UA,
             'x-rpc-client_type': '4',
@@ -247,7 +248,7 @@ class OS:
 
 
 class CN:
-    def getUserInfo(MiYouSheID: str) -> {}:
+    def getUserInfo(MiYouSheID: str) -> dict:
         headers = {
             'User-Agent': CN_UA,
             'x-rpc-client_type': '5',
@@ -280,7 +281,7 @@ class CN:
                            "region_name": regionName,
                            "level": level})
 
-    def getRoleInfo(UID: str, region: str) -> []:
+    def getRoleInfo(UID: str, region: str) -> array:
         headers = {
             'User-Agent': CN_UA,
             'x-rpc-client_type': '5',
@@ -305,7 +306,7 @@ class CN:
                 card.append(c)
         return card
 
-    def getGameInfo(UID: str, region: str) -> {}:
+    def getGameInfo(UID: str, region: str) -> dict:
         headers = {
             'User-Agent': CN_UA,
             'x-rpc-client_type': '5',
@@ -359,7 +360,7 @@ class CN:
                            'world_exploration': worldExploration,
                            'homes': sereniteaPot})
 
-    def getRoleWeaponAndReliquaries(UID: str, region: str) -> []:
+    def getRoleWeaponAndReliquaries(UID: str, region: str) -> array:
         headers = {
             'User-Agent': CN_UA,
             'x-rpc-client_type': '5',
@@ -400,7 +401,7 @@ class CN:
             return {'message': js['message'], 'roles': roles}
         return [js['message']]
 
-    def getSpiralAbyss(UID: str, region: str, schedule_type: str) -> {}:
+    def getSpiralAbyss(UID: str, region: str, schedule_type: str) -> dict:
         headers = {
             'User-Agent': CN_UA,
             'x-rpc-client_type': '5',

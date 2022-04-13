@@ -1,3 +1,4 @@
+from array import array
 import json
 
 from prettytable import PrettyTable
@@ -271,7 +272,7 @@ class OS:
         print(table)
 
 
-def reliquaries_info(data: {}):
+def reliquaries_info(data: dict):
     inn = input("请输入你要查询的人物id\n")
     if inn.isalnum():
         if int(inn) < 0 or int(inn) > len(data['roles']) - 1:
@@ -306,7 +307,7 @@ def reliquaries_info(data: {}):
     return
 
 
-def rank_info(rank: {}) -> []:
+def rank_info(rank: dict) -> array:
     reveal = ''
     defeat = ''
     damage = ''

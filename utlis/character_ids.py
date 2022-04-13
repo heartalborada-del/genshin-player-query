@@ -1,22 +1,8 @@
+import json
 import os
 
 import utlis.request
-ids = {10000003: '琴', 10000016: '迪卢克', 10000022: '温迪', 10000029: '可莉',
-       10000026: '魈', 10000007: '旅行者', 10000041: '莫娜', 10000042: '刻晴',
-       10000035: '七七', 10000030: '钟离', 10000033: '达达利亚', 10000038: '阿贝多',
-       10000037: '甘雨', 10000002: '神里绫华', 10000046: '胡桃', 10000052: '雷电将军',
-       10000051: '优菈', 10000049: '宵宫', 10000047: '枫原万叶', 10000058: '八重神子',
-       10000054: '珊瑚宫心海', 10000062: '埃洛伊', 10000066: '神里绫人', 10000057: '荒泷一斗',
-       10000063: '申鹤',
-       10000024: '北斗', 10000021: '安柏', 10000006: '丽莎', 10000015: '凯亚',
-       10000014: '芭芭拉', 10000020: '雷泽', 10000025: '行秋', 10000031: '菲谢尔',
-       10000034: '诺艾尔', 10000032: '班尼特', 10000036: '重云', 10000023: '香菱',
-       10000027: '凝光', 10000043: '砂糖', 10000039: '迪奥娜', 10000044: '辛焱',
-       10000045: '罗莎莉亚', 10000064: '云堇', 10000048: '烟绯', 10000053: '早柚',
-       10000055: '五郎', 10000056: '九条裟罗', 10000050: '托马'}
-
-def getIDs() -> None:
-    checkNewIDsList()
+ids = {}
 
 def getName(character_id: int) -> str:
     name = 'id-' + str(character_id)
@@ -24,14 +10,40 @@ def getName(character_id: int) -> str:
         name = ids[character_id]
     return name
 
-def checkNewIDsList() -> None:
+def checkNewIDsList() -> No:
+    gh_json = getNewIDsList()
+    if 'retcode' in gh_json.keys():
+        print('error, failed message'+gh_json['message'])
+        if not os.path.isfile("config/characters_ids.json"):
+            print('本地没有id表且无法获取云端表,按回车键退出')
+            input()
+            os._exit(0)
+        return
+    local_json = {}
     if not os.path.isdir('config'):
         os.makedirs('config')
     if not os.path.isfile("config/characters_ids.json"):
-        writeOptions()
+        with open("config/options.json", "w") as f:
+            f.write(gh_json)
+            ids = gh_json['ids']
+        return
+    with open("config/options.json", "r") as f:
+        local_json = json.loads(f.read)
+    if gh_json['version'] > local_json['version']:
+        with open("config/options.json", "w") as f:
+            f.write(gh_json)
+            ids = gh_json['ids']
+        return
+    ids = local_json['ids']
+    return
+    
 
-def getNewIDsList() -> None:
-    utlis.request.doGet()
+def getNewIDsList() -> dict:
+    headers={
+        'User-Agent': "Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0"
+    }
+    return json.loads(utlis.request.doGet(url='https://cdn.jsdelivr.net/gh/heartalborada-del/genshin-player-query@master/config/ids.json',
+                        headers=headers))
 '''
 --- 5 stars ---
 琴 10000003
