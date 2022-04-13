@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 import main
 
@@ -35,3 +36,6 @@ def readOptions():
         main.CN_Cookie = j['CN_Cookie']
         main.Oversea_Cookie = j['Oversea_Cookie']
         main.httpProxy = j['httpProxy']
+        if not main.httpProxy == "":
+            print("注意,你当前的代理已设置为: " + main.httpProxy)
+

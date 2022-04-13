@@ -1,1 +1,6 @@
 /options.json
+/gh raw 镜像.url
+/bulid.bat
+/dist/*
+/bulid/*
+/venv/*
