@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 import os
-=======
->>>>>>> eb4ae7e857ac122b41a2ed9c5a0509592aa0aaf8
+
+import utlis.request
 ids = {10000003: '琴', 10000016: '迪卢克', 10000022: '温迪', 10000029: '可莉',
        10000026: '魈', 10000007: '旅行者', 10000041: '莫娜', 10000042: '刻晴',
        10000035: '七七', 10000030: '钟离', 10000033: '达达利亚', 10000038: '阿贝多',
@@ -16,11 +15,8 @@ ids = {10000003: '琴', 10000016: '迪卢克', 10000022: '温迪', 10000029: '�
        10000045: '罗莎莉亚', 10000064: '云堇', 10000048: '烟绯', 10000053: '早柚',
        10000055: '五郎', 10000056: '九条裟罗', 10000050: '托马'}
 
-<<<<<<< HEAD
 def getIDs() -> None:
     checkNewIDsList()
-=======
->>>>>>> eb4ae7e857ac122b41a2ed9c5a0509592aa0aaf8
 
 def getName(character_id: int) -> str:
     name = 'id-' + str(character_id)
@@ -28,12 +24,14 @@ def getName(character_id: int) -> str:
         name = ids[character_id]
     return name
 
-<<<<<<< HEAD
 def checkNewIDsList() -> None:
-    return
-=======
+    if not os.path.isdir('config'):
+        os.makedirs('config')
+    if not os.path.isfile("config/characters_ids.json"):
+        writeOptions()
 
->>>>>>> eb4ae7e857ac122b41a2ed9c5a0509592aa0aaf8
+def getNewIDsList() -> None:
+    utlis.request.doGet()
 '''
 --- 5 stars ---
 琴 10000003
