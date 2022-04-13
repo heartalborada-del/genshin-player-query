@@ -10,7 +10,7 @@ def getName(character_id: int) -> str:
         name = ids[character_id]
     return name
 
-def checkNewIDsList() -> No:
+def checkNewIDsList() -> None:
     gh_json = getNewIDsList()
     if 'retcode' in gh_json.keys():
         print('error, failed message'+gh_json['message'])
