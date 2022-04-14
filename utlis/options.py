@@ -23,7 +23,9 @@ def writeOptions():
     with open(file="config/options.json", mode="w", encoding='utf-8') as f:
         f.write(json.dumps({'CN_Cookie': main.CN_Cookie,
                             'Oversea_Cookie': main.Oversea_Cookie,
-                            'httpProxy': main.httpProxy}))
+                            'httpProxy': main.httpProxy},
+                            indent = 4,
+                            ensure_ascii=False))
 
 
 def readOptions():

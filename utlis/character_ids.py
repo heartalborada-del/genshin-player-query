@@ -7,12 +7,11 @@ ids = {}
 def getName(character_id: int) -> str:
     name = 'id-' + str(character_id)
     if character_id in ids.keys():
-        name = ids[character_id]
+        name = ids[str(character_id)]
     return name
 
 def checkNewIDsList() -> None:
-    gh_text = getNewIDsList()
-    gh_json = json.loads(str(gh_text))
+    gh_json = json.loads(getNewIDsList())
     if 'retcode' in gh_json.keys():
         print('获取最新id对照表失败'+gh_json['message'])
         if not os.path.isfile("config/characters_ids.json"):
@@ -25,7 +24,7 @@ def checkNewIDsList() -> None:
         os.makedirs('config')
     if not os.path.isfile("config/characters_ids.json"):
         with open(file="config/characters_ids.json", mode="w", encoding='UTF-8') as f:
-            f.write(str(gh_text))
+            f.write(json.dumps(gh_json,indent=4,sort_keys=True,ensure_ascii=False))
             ids = gh_json['ids']
         return
     with open(file="config/characters_ids.json", mode="r", encoding='UTF-8') as f:
@@ -33,7 +32,7 @@ def checkNewIDsList() -> None:
     print('云端最新版本:'+gh_json['version'])
     if float(gh_json['version']) > float(local_json['version']):
         with open(file="config/characters_ids.json", mode="w", encoding='UTF-8') as f:
-            f.write(str(gh_text))
+            f.write(json.dumps(gh_json,indent=4,sort_keys=True,ensure_ascii=False))
             ids = gh_json['ids']
         return
     ids = local_json['ids']
