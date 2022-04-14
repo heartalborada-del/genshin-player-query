@@ -1,7 +1,8 @@
-config/
+/config/
 *.bat
 main/
-dist/
+/dist/
+/.idea/
 /.vscode/
 venv/
 __pycache__/
