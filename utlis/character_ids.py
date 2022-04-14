@@ -11,9 +11,10 @@ def getName(character_id: int) -> str:
     return name
 
 def checkNewIDsList() -> None:
-    gh_json = getNewIDsList()
+    gh_text = getNewIDsList()
+    gh_json = json.loads(gh_text)
     if 'retcode' in gh_json.keys():
-        print('error, failed message'+gh_json['message'])
+        print('获取最新id对照表失败'+gh_json['message'])
         if not os.path.isfile("config/characters_ids.json"):
             print('本地没有id表且无法获取云端表,按回车键退出')
             input()
@@ -23,14 +24,14 @@ def checkNewIDsList() -> None:
     if not os.path.isdir('config'):
         os.makedirs('config')
     if not os.path.isfile("config/characters_ids.json"):
-        with open("config/options.json", "w") as f:
+        with open("config/characters_ids.json", "w") as f:
             f.write(str(gh_json))
             ids = gh_json['ids']
         return
-    with open("config/options.json", "r") as f:
+    with open("config/characters_ids.json", "r") as f:
         local_json = json.loads(f.read)
-    if gh_json['version'] > local_json['version']:
-        with open("config/options.json", "w") as f:
+    if float(gh_json['version']) > float(local_json['version']):
+        with open("config/characters_ids.json", "w") as f:
             f.write(str(gh_json))
             ids = gh_json['ids']
         return
@@ -42,8 +43,8 @@ def getNewIDsList() -> dict:
     headers={
         'User-Agent': "Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0"
     }
-    return json.loads(utlis.request.doGet(url='https://cdn.jsdelivr.net/gh/heartalborada-del/genshin-player-query@master/config/ids.json',
-                        headers=headers))
+    return utlis.request.doGet(url='https://gh-proxy.heartalborada.workers.dev/https://raw.githubusercontent.com/heartalborada-del/genshin-player-query/master/json/character_ids.json',
+                        headers=headers)
 '''
 --- 5 stars ---
 琴 10000003
