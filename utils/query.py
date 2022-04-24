@@ -1,13 +1,15 @@
 from array import array
 import json
+from typing import List
 
 from prettytable import PrettyTable
 
-import utlis.stats
-from utlis import stats
+import utils.stats
+from utils import stats
 
 
 class CN:
+    @staticmethod
     def CN_uid_query(uid: str, server: str):
         data = json.loads(stats.CN.getGameInfo(uid, server))
         if not data['message'] == 'OK':
@@ -63,6 +65,7 @@ class CN:
         if inn == "Y" or inn == "y":
             CN.CN_spiralAbyss_info(uid, server)
 
+    @staticmethod
     def CN_MiYouSheID_query(MiYouSheID: str):
         data = json.loads(stats.CN.getUserInfo(MiYouSheID))
         if not data['message'] == 'OK':
@@ -80,6 +83,7 @@ class CN:
         if inn == "Y" or inn == "y":
             CN.CN_uid_query(uid=data['game_role_id'], server=data['region'])
 
+    @staticmethod
     def CN_role_info(uid: str, server: str):
         data = stats.CN.getRoleWeaponAndReliquaries(UID=uid, region=server)
         table1 = PrettyTable(["ID", '角色名称', '等级', '元素类型', '稀有度', '命之座等级'])
@@ -119,9 +123,10 @@ class CN:
             if inn == "Y" or inn == "y":
                 reliquaries_info(data)
 
+    @staticmethod
     def CN_spiralAbyss_info(uid: str, server: str):
-        data1 = utlis.stats.CN.getSpiralAbyss(UID=uid, region=server, schedule_type='1')
-        data2 = utlis.stats.CN.getSpiralAbyss(UID=uid, region=server, schedule_type='2')
+        data1 = utils.stats.CN.getSpiralAbyss(UID=uid, region=server, schedule_type='1')
+        data2 = utils.stats.CN.getSpiralAbyss(UID=uid, region=server, schedule_type='2')
         table = PrettyTable(['期数', '开始-结束时间', '总挑战次数', '胜利次数', '最深抵达'])
         # print(data1)
         table.add_row([data1['id'], data1['time'], data1['total_battle_times'],
@@ -131,16 +136,17 @@ class CN:
         table.hrules = True
         print(table)
         table = PrettyTable(['期数', '出战次数', '最多击破数', '最强一击', '承受最多伤害', '元素战技释放数', '元素爆发次数'])
-        rank = utlis.query.rank_info(data1['rank'])
+        rank = utils.query.rank_info(data1['rank'])
         table.add_row([data1['id'], rank[0], rank[1], rank[2], rank[3], rank[4], rank[5]])
-        rank = utlis.query.rank_info(data2['rank'])
-        #print(rank)
+        rank = utils.query.rank_info(data2['rank'])
+        # print(rank)
         table.add_row([data2['id'], rank[0], rank[1], rank[2], rank[3], rank[4], rank[5]])
         table.hrules = True
         print(table)
 
 
 class OS:
+    @staticmethod
     def OS_uid_query(uid: str, server: str):
         data = json.loads(stats.OS.getGameInfo(uid, server))
         if not data['message'] == 'OK':
@@ -196,6 +202,7 @@ class OS:
         if inn == "Y" or inn == "y":
             OS.OS_spiralAbyss_info(uid, server)
 
+    @staticmethod
     def OS_HoYoLabID_query(HoYoLabID: str):
         data = json.loads(stats.OS.getUserInfo(HoYoLabID))
         if not data['message'] == 'OK':
@@ -213,8 +220,9 @@ class OS:
         if inn == "Y" or inn == "y":
             OS.OS_uid_query(uid=data['game_role_id'], server=data['region'])
 
+    @staticmethod
     def OS_role_info(uid: str, server: str):
-        data = stats.OS.getRoleWeaponAndReliquaries(UID=uid, region=server)
+        data = stats.OS.getRoleWeaponAndReliquaries(region=server)
         table1 = PrettyTable(["ID", '角色名称', '等级', '元素类型', '稀有度', '命之座等级'])
         table2 = PrettyTable(["ID", '角色名称', '武器', '武器类型', '稀有度', '武器等级', '精炼等级'])
         table3 = PrettyTable(["ID", '角色名称', '生之花', '死之羽', '时之沙', '空之杯', '理之冠'])
@@ -252,9 +260,10 @@ class OS:
             if inn == "Y" or inn == "y":
                 reliquaries_info(data)
 
+    @staticmethod
     def OS_spiralAbyss_info(uid: str, server: str):
-        data1 = utlis.stats.OS.getSpiralAbyss(UID=uid, region=server, schedule_type='1')
-        data2 = utlis.stats.OS.getSpiralAbyss(UID=uid, region=server, schedule_type='2')
+        data1 = utils.stats.OS.getSpiralAbyss(UID=uid, region=server, schedule_type='1')
+        data2 = utils.stats.OS.getSpiralAbyss(UID=uid, region=server, schedule_type='2')
         table = PrettyTable(['期数', '开始-结束时间', '总挑战次数', '胜利次数', '最深抵达'])
         # print(data1)
         table.add_row([data1['id'], data1['time'], data1['total_battle_times'],
@@ -264,9 +273,9 @@ class OS:
         table.hrules = True
         print(table)
         table = PrettyTable(['期数', '出战次数', '最多击破数', '最强一击', '承受最多伤害', '元素爆发次数', '元素战技释放数'])
-        rank = utlis.query.rank_info(data1['rank'])
+        rank = utils.query.rank_info(data1['rank'])
         table.add_row([data1['id'], rank[0], rank[1], rank[2], rank[3], rank[4], rank[5]])
-        rank = utlis.query.rank_info(data2['rank'])
+        rank = utils.query.rank_info(data2['rank'])
         table.add_row([data2['id'], rank[0], rank[1], rank[2], rank[3], rank[4], rank[5]])
         table.hrules = True
         print(table)
@@ -307,7 +316,7 @@ def reliquaries_info(data: dict):
     return
 
 
-def rank_info(rank: dict) -> array:
+def rank_info(rank: dict) -> list[str]:
     reveal = ''
     defeat = ''
     damage = ''

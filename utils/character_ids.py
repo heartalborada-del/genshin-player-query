@@ -1,7 +1,7 @@
 import json
 import os
 
-import utlis.request
+import utils.request
 ids = {}
 
 def getName(character_id: int) -> str:
@@ -30,6 +30,7 @@ def checkNewIDsList() -> None:
     with open(file="config/characters_ids.json", mode="r", encoding='UTF-8') as f:
         local_json = json.load(f)
     print('云端最新版本:'+gh_json['version'])
+    print('本地最新版本:'+local_json['version'])
     if float(gh_json['version']) > float(local_json['version']):
         with open(file="config/characters_ids.json", mode="w", encoding='UTF-8') as f:
             f.write(json.dumps(gh_json,indent=4,sort_keys=True,ensure_ascii=False))
@@ -43,8 +44,8 @@ def getNewIDsList() -> str:
     headers={
         'User-Agent': "Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0"
     }
-    return utlis.request.doGet(url='https://gh-proxy.heartalborada.workers.dev/https://raw.githubusercontent.com/heartalborada-del/genshin-player-query/master/json/characters_ids.json',
-                        headers=headers)
+    return utils.request.doGet(url='https://gh-proxy.heartalborada.workers.dev/https://raw.githubusercontent.com/heartalborada-del/genshin-player-query/master/json/characters_ids.json',
+                               headers=headers)
 '''
 --- 5 stars ---
 琴 10000003

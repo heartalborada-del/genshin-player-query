@@ -1,12 +1,11 @@
-from array import array
 import json
 import time
 
 import main
-import utlis.DS
-import utlis.character_ids
-import utlis.request
-from utlis import request
+import utils.DS
+import utils.character_ids
+import utils.request
+from utils import request
 
 OS_TAKUMI_URL = "https://bbs-api-os.hoyolab.com/"
 CN_TAKUMI_URL = "https://api-takumi-record.mihoyo.com/"
@@ -17,56 +16,51 @@ CN_UA = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/60
 
 
 class OS:
-    def getUserInfo(HoYoLabID: str) -> dict:
+    @staticmethod
+    def getUserInfo(HoYoLabID: str):
         headers = {
             'User-Agent': OS_UA,
             'x-rpc-client_type': '5',
             'x-rpc-app_version': '1.5.0',
-            # 'DS': utlis.DS.generate_ds(),
+            # 'DS': utils.DS.generate_ds(),
             'Referer': 'https://webstatic-sea.hoyolab.com/',
             'Cookie': main.Oversea_Cookie
         }
-        re = utlis.request.doGet(url=(OS_TAKUMI_URL + "game_record/card/wapi/getGameRecordCard?uid=" + HoYoLabID),
+        re = utils.request.doGet(url=(OS_TAKUMI_URL + "game_record/card/wapi/getGameRecordCard?uid=" + HoYoLabID),
                                  headers=headers)
+        js = json.loads(re)
         nickname = ""
         gameRoleID = ""
         region = ""
         regionName = ""
         level = ""
-        if re.status_code == 200:
-            js = json.loads(re)
-            if js['retcode'] == 0:
-                if js['data']['list']:
-                    for a in js['data']['list']:
-                        if not a['game_id'] == 2:
-                            continue
-                        nickname = a['nickname']
-                        gameRoleID = a["game_role_id"]
-                        region = a['region']
-                        regionName = a['region_name']
-                        level = str(a['level'])
-            return json.dumps({"message": js['message'],
-                               "name": nickname,
-                               "game_role_id": gameRoleID,
-                               "region": region,
-                               "region_name": regionName,
-                               "level": level})
-        return json.dumps({"message": 'http request failed,code: ' + str(re.status_code),
+        if js['retcode'] == 0:
+            if js['data']['list']:
+                for a in js['data']['list']:
+                    if not a['game_id'] == 2:
+                        continue
+                    nickname = a['nickname']
+                    gameRoleID = a["game_role_id"]
+                    region = a['region']
+                    regionName = a['region_name']
+                    level = str(a['level'])
+        return json.dumps({"message": js['message'],
                            "name": nickname,
                            "game_role_id": gameRoleID,
                            "region": region,
                            "region_name": regionName,
                            "level": level})
 
-    def getRoleInfo(UID: str, region: str) -> array:
+    @staticmethod
+    def getRoleInfo(UID: str, region: str):
         headers = {
             'User-Agent': OS_UA,
             'x-rpc-client_type': '4',
             'x-rpc-app_version': '1.5.0',
-            'DS': utlis.DS.generate_ds(),
+            'DS': utils.DS.generate_ds(),
             'Cookie': main.Oversea_Cookie
         }
-        re = utlis.request.doGet(url=(OS_GAME_RECORD_URL + "genshin/api/index?role_id=" + UID + "&server=" + region),
+        re = utils.request.doGet(url=(OS_GAME_RECORD_URL + "genshin/api/index?role_id=" + UID + "&server=" + region),
                                  headers=headers)
         js = json.loads(re)
         card = []
@@ -82,15 +76,16 @@ class OS:
                 card.append(c)
         return card
 
-    def getGameInfo(UID: str, region: str) -> dict:
+    @staticmethod
+    def getGameInfo(UID: str, region: str):
         headers = {
             'User-Agent': OS_UA,
             'x-rpc-client_type': '4',
             'x-rpc-app_version': '1.5.0',
-            'DS': utlis.DS.generate_ds(),
+            'DS': utils.DS.generate_ds(),
             'Cookie': main.Oversea_Cookie
         }
-        re = utlis.request.doGet(url=(OS_GAME_RECORD_URL + "genshin/api/index?role_id=" + UID + "&server=" + region),
+        re = utils.request.doGet(url=(OS_GAME_RECORD_URL + 'genshin/api/index?role_id=' + UID + "&server=" + region),
                                  headers=headers)
         js = json.loads(re)
         summary = {}
@@ -136,12 +131,13 @@ class OS:
                            'world_exploration': worldExploration,
                            'homes': sereniteaPot})
 
-    def getRoleWeaponAndReliquaries(UID: str, region: str) -> array:
+    @staticmethod
+    def getRoleWeaponAndReliquaries(UID: str, region: str):
         headers = {
             'User-Agent': OS_UA,
             'x-rpc-client_type': '4',
             'x-rpc-app_version': '1.5.0',
-            'DS': utlis.DS.generate_ds(),
+            'DS': utils.DS.generate_ds(),
             'Cookie': main.Oversea_Cookie
         }
         re = request.doPost(url=(OS_GAME_RECORD_URL + "genshin/api/character"),
@@ -176,15 +172,16 @@ class OS:
             return {'message': js['message'], 'roles': roles}
         return [js['message']]
 
-    def getSpiralAbyss(UID: str, region: str, schedule_type: str) -> dict:
+    @staticmethod
+    def getSpiralAbyss(self, UID: str, region: str, schedule_type: str):
         headers = {
             'User-Agent': OS_UA,
             'x-rpc-client_type': '4',
             'x-rpc-app_version': '1.5.0',
-            'DS': utlis.DS.generate_ds(),
+            'DS': utils.DS.generate_ds(),
             'Cookie': main.Oversea_Cookie
         }
-        re = utlis.request.doGet(
+        re = utils.request.doGet(
             url=(OS_GAME_RECORD_URL + "genshin/api/spiralAbyss?server=" + region + "&role_id=" + UID +
                  '&schedule_type=' + schedule_type),
             headers=headers)
@@ -193,7 +190,7 @@ class OS:
         mf = ''
         tbt = 0
         twt = 0
-        id = 0
+        sid = 0
         reveal_rank = []
         defeat_rank = []
         damage_rank = []
@@ -202,38 +199,38 @@ class OS:
         energy_skill_rank = []
         if js['retcode'] == 0:
             da = js['data']
-            id = da['schedule_id']
+            sid = da['schedule_id']
             tm = time.strftime("%Y.%m.%d", (time.localtime(int(da['start_time'])))) + ' - ' + time.strftime(
                 "%Y.%m.%d", time.localtime(int(da['end_time'])))
             mf = js['data']['max_floor']
             tbt = js['data']['total_battle_times']
             twt = js['data']['total_win_times']
             for a in da['reveal_rank']:
-                reveal_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                reveal_rank.append({"name": utils.character_ids.getName(a['avatar_id']),
                                     'value': a['value'],
                                     'rarity': a['rarity']})
             for a in da['defeat_rank']:
-                defeat_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                defeat_rank.append({"name": utils.character_ids.getName(a['avatar_id']),
                                     'value': a['value'],
                                     'rarity': a['rarity']})
             for a in da['damage_rank']:
-                damage_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                damage_rank.append({"name": utils.character_ids.getName(a['avatar_id']),
                                     'value': a['value'],
                                     'rarity': a['rarity']})
             for a in da['take_damage_rank']:
-                take_damage_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                take_damage_rank.append({"name": utils.character_ids.getName(a['avatar_id']),
                                          'value': a['value'],
                                          'rarity': a['rarity']})
             for a in da['normal_skill_rank']:
-                normal_skill_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                normal_skill_rank.append({"name": utils.character_ids.getName(a['avatar_id']),
                                           'value': a['value'],
                                           'rarity': a['rarity']})
             for a in da['energy_skill_rank']:
-                energy_skill_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                energy_skill_rank.append({"name": utils.character_ids.getName(a['avatar_id']),
                                           'value': a['value'],
                                           'rarity': a['rarity']})
         return {'message': js['message'],
-                'id': id,
+                'id': sid,
                 'time': tm,
                 'max_floor': mf,
                 'total_battle_times': tbt,
@@ -248,15 +245,16 @@ class OS:
 
 
 class CN:
-    def getUserInfo(MiYouSheID: str) -> dict:
+    @staticmethod
+    def getUserInfo(MiYouSheID: str):
         headers = {
             'User-Agent': CN_UA,
             'x-rpc-client_type': '5',
             'x-rpc-app_version': '2.11.1',
-            'DS': utlis.DS.generate_cn_ds(query={'uid': MiYouSheID}),
+            'DS': utils.DS.generate_cn_ds(query={'uid': MiYouSheID}),
             'Cookie': main.CN_Cookie
         }
-        re = utlis.request.doGet(url=(CN_TAKUMI_URL + "game_record/app/card/wapi/getGameRecordCard?uid=" + MiYouSheID),
+        re = utils.request.doGet(url=(CN_TAKUMI_URL + "game_record/app/card/wapi/getGameRecordCard?uid=" + MiYouSheID),
                                  headers=headers)
         js = json.loads(re)
         nickname = ""
@@ -281,17 +279,18 @@ class CN:
                            "region_name": regionName,
                            "level": level})
 
-    def getRoleInfo(UID: str, region: str) -> array:
+    @staticmethod
+    def getRoleInfo(UID: str, region: str):
         headers = {
             'User-Agent': CN_UA,
             'x-rpc-client_type': '5',
             'x-rpc-app_version': '2.11.1',
-            'DS': utlis.DS.generate_cn_ds(query={"role_id": UID, 'server': region}),
+            'DS': utils.DS.generate_cn_ds(query={"role_id": UID, 'server': region}),
             'Cookie': main.CN_Cookie
         }
-        re = utlis.request.doGet(url=(CN_GAME_RECORD_URL + "genshin/api/index?role_id=" + UID + "&server=" + region),
+        re = utils.request.doGet(url=(CN_GAME_RECORD_URL + "genshin/api/index?role_id=" + UID + "&server=" + region),
                                  headers=headers)
-        #print(re)
+        # print(re)
         js = json.loads(re)
         card = []
         if js['retcode'] == 0:
@@ -306,15 +305,16 @@ class CN:
                 card.append(c)
         return card
 
-    def getGameInfo(UID: str, region: str) -> dict:
+    @staticmethod
+    def getGameInfo(UID: str, region: str):
         headers = {
             'User-Agent': CN_UA,
             'x-rpc-client_type': '5',
             'x-rpc-app_version': '2.11.1',
-            'DS': utlis.DS.generate_cn_ds(query={"role_id": UID, 'server': region}),
+            'DS': utils.DS.generate_cn_ds(query={"role_id": UID, 'server': region}),
             'Cookie': main.CN_Cookie
         }
-        re = utlis.request.doGet(url=(CN_GAME_RECORD_URL + "genshin/api/index?role_id=" + UID + "&server=" + region),
+        re = utils.request.doGet(url=(CN_GAME_RECORD_URL + "genshin/api/index?role_id=" + UID + "&server=" + region),
                                  headers=headers)
         js = json.loads(re)
         summary = {}
@@ -360,12 +360,13 @@ class CN:
                            'world_exploration': worldExploration,
                            'homes': sereniteaPot})
 
-    def getRoleWeaponAndReliquaries(UID: str, region: str) -> array:
+    @staticmethod
+    def getRoleWeaponAndReliquaries(UID: str, region: str):
         headers = {
             'User-Agent': CN_UA,
             'x-rpc-client_type': '5',
             'x-rpc-app_version': '2.11.1',
-            'DS': utlis.DS.generate_cn_ds(body={"role_id": UID, "server": region}),
+            'DS': utils.DS.generate_cn_ds(body={"role_id": UID, "server": region}),
             'Cookie': main.CN_Cookie,
             'Referer': "https://webstatic.mihoyo.com/"
         }
@@ -401,16 +402,17 @@ class CN:
             return {'message': js['message'], 'roles': roles}
         return [js['message']]
 
-    def getSpiralAbyss(UID: str, region: str, schedule_type: str) -> dict:
+    @staticmethod
+    def getSpiralAbyss(UID: str, region: str, schedule_type: str):
         headers = {
             'User-Agent': CN_UA,
             'x-rpc-client_type': '5',
             'x-rpc-app_version': '2.11.1',
-            'DS': utlis.DS.generate_cn_ds(query={"role_id": UID, "server": region, 'schedule_type': schedule_type}),
+            'DS': utils.DS.generate_cn_ds(query={"role_id": UID, "server": region, 'schedule_type': schedule_type}),
             'Cookie': main.CN_Cookie,
             'Referer': "https://webstatic.mihoyo.com/"
         }
-        re = utlis.request.doGet(url=(CN_GAME_RECORD_URL + "genshin/api/spiralAbyss?&role_id=" + UID +
+        re = utils.request.doGet(url=(CN_GAME_RECORD_URL + "genshin/api/spiralAbyss?&role_id=" + UID +
                                       '&server=' + region + '&schedule_type=' + schedule_type),
                                  headers=headers)
         js = json.loads(re)
@@ -434,27 +436,27 @@ class CN:
             tbt = js['data']['total_battle_times']
             twt = js['data']['total_win_times']
             for a in da['reveal_rank']:
-                reveal_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                reveal_rank.append({"name": utils.character_ids.getName(a['avatar_id']),
                                     'value': a['value'],
                                     'rarity': a['rarity']})
             for a in da['defeat_rank']:
-                defeat_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                defeat_rank.append({"name": utils.character_ids.getName(a['avatar_id']),
                                     'value': a['value'],
                                     'rarity': a['rarity']})
             for a in da['damage_rank']:
-                damage_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                damage_rank.append({"name": utils.character_ids.getName(a['avatar_id']),
                                     'value': a['value'],
                                     'rarity': a['rarity']})
             for a in da['take_damage_rank']:
-                take_damage_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                take_damage_rank.append({"name": utils.character_ids.getName(a['avatar_id']),
                                          'value': a['value'],
                                          'rarity': a['rarity']})
             for a in da['normal_skill_rank']:
-                normal_skill_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                normal_skill_rank.append({"name": utils.character_ids.getName(a['avatar_id']),
                                           'value': a['value'],
                                           'rarity': a['rarity']})
             for a in da['energy_skill_rank']:
-                energy_skill_rank.append({"name": utlis.character_ids.getName(a['avatar_id']),
+                energy_skill_rank.append({"name": utils.character_ids.getName(a['avatar_id']),
                                           'value': a['value'],
                                           'rarity': a['rarity']})
         return {'message': js['message'],

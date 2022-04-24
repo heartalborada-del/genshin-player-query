@@ -6,3 +6,4 @@ main/
 /.vscode/
 venv/
 __pycache__/
+*.url
